@@ -182,8 +182,14 @@ function PureMultimodalInput({
           contentType: contentType,
         };
       }
-      const { error } = await response.json();
-      toast.error(error);
+      let errorMessage = 'Upload failed';
+      try {
+        const { error } = await response.json();
+        errorMessage = response.status === 401 ? 'Please sign in to upload files.' : error || errorMessage;
+      } catch {
+        errorMessage = response.status === 401 ? 'Please sign in to upload files.' : errorMessage;
+      }
+      toast.error(errorMessage);
     } catch (error) {
       toast.error('Failed to upload file, please try again!');
     }
@@ -294,6 +300,7 @@ function PureMultimodalInput({
         className="-top-4 -left-4 pointer-events-none fixed size-0.5 opacity-0"
         ref={fileInputRef}
         multiple
+        accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx,.csv,.ppt,.pptx,.txt,.md,.json,.log,.rtf"
         onChange={handleFileChange}
         tabIndex={-1}
       />
