@@ -132,7 +132,7 @@ importers:
         specifier: ^1.0.5
         version: 1.0.5
       dotenv:
-        specifier: ^16.4.5
+        specifier: ^16.4.7
         version: 16.4.7
       drizzle-orm:
         specifier: ^0.34.0
@@ -268,7 +268,7 @@ importers:
         specifier: ^4.0.8
         version: 4.0.9
       '@types/node':
-        specifier: ^22.8.6
+        specifier: ^22.13.10
         version: 22.13.10
       '@types/papaparse':
         specifier: ^5.3.15
@@ -313,7 +313,7 @@ importers:
         specifier: ^4.19.1
         version: 4.19.3
       typescript:
-        specifier: ^5.6.3
+        specifier: ^5.8.2
         version: 5.8.2
 
 packages:
