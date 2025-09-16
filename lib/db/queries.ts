@@ -27,6 +27,8 @@ import {
   type DBMessage,
   type Chat,
   stream,
+  note,
+  type Note,
 } from './schema';
 import type { ArtifactKind } from '@/components/artifact';
 import { generateUUID } from '../utils';
@@ -561,5 +563,59 @@ export async function getStreamIdsByChatId({ chatId }: { chatId: string }) {
       'bad_request:database',
       'Failed to get stream ids by chat id',
     );
+  }
+}
+
+// Notes
+export async function getNotesByUserId({ userId }: { userId: string }) {
+  try {
+    return await db
+      .select()
+      .from(note)
+      .where(eq(note.userId, userId))
+      .orderBy(desc(note.createdAt));
+  } catch (error) {
+    throw new ChatSDKError('bad_request:database', 'Failed to get notes');
+  }
+}
+
+export async function createNote({
+  userId,
+  title,
+  content,
+  tags,
+}: {
+  userId: string;
+  title: string;
+  content: string;
+  tags?: string[];
+}) {
+  try {
+    const now = new Date();
+    const [created] = await db
+      .insert(note)
+      .values({ userId, title, content, tags, createdAt: now, updatedAt: now })
+      .returning();
+    return created;
+  } catch (error) {
+    throw new ChatSDKError('bad_request:database', 'Failed to create note');
+  }
+}
+
+export async function deleteNoteById({
+  id,
+  userId,
+}: {
+  id: string;
+  userId: string;
+}) {
+  try {
+    const [deleted] = await db
+      .delete(note)
+      .where(and(eq(note.id, id), eq(note.userId, userId)))
+      .returning();
+    return deleted;
+  } catch (error) {
+    throw new ChatSDKError('bad_request:database', 'Failed to delete note');
   }
 }

@@ -21,6 +21,21 @@ export const user = pgTable('User', {
 
 export type User = InferSelectModel<typeof user>;
 
+// Notes authored by a user
+export const note = pgTable('Note', {
+  id: uuid('id').primaryKey().notNull().defaultRandom(),
+  userId: uuid('userId')
+    .notNull()
+    .references(() => user.id),
+  title: text('title').notNull(),
+  content: text('content'),
+  tags: text('tags').array(),
+  createdAt: timestamp('createdAt').notNull(),
+  updatedAt: timestamp('updatedAt'),
+});
+
+export type Note = InferSelectModel<typeof note>;
+
 export const chat = pgTable('Chat', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
   createdAt: timestamp('createdAt').notNull(),
